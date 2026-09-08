@@ -1,159 +1,830 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learnly — Learning Space</title>
-<style>
-:root{
-  --bg:#f7f8fc; --surface:#fff; --ink:#171927; --muted:#73778b;
-  --line:#e8eaf2; --primary:#6d5dfc; --primary2:#8d7cff;
-  --soft:#eeecff; --green:#20b486; --orange:#ff9f43; --shadow:0 18px 50px rgba(31,27,75,.09);
-}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
-button,input{font:inherit}.app{display:flex;min-height:100vh}
-.sidebar{width:250px;background:#fff;border-right:1px solid var(--line);padding:24px 16px;position:fixed;inset:0 auto 0 0;z-index:10}
-.logo{display:flex;align-items:center;gap:10px;padding:6px 12px 28px;font-weight:800;font-size:21px}
-.logo-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#6d5dfc,#a18cff);display:grid;place-items:center;color:#fff;box-shadow:0 8px 20px #7566fc40}
-.nav{display:grid;gap:6px}.nav button{border:0;background:none;color:#70758a;text-align:left;padding:12px 14px;border-radius:13px;cursor:pointer;display:flex;gap:12px;align-items:center;font-weight:600}
-.nav button:hover,.nav button.active{background:var(--soft);color:var(--primary)}
-.nav .admin-link{margin-top:12px;color:#d14e78}.nav .admin-link.active{background:#fff0f5;color:#d14e78}
-.user-mini{position:absolute;bottom:22px;left:20px;right:20px;padding:12px;background:#fafaff;border:1px solid var(--line);border-radius:16px;display:flex;align-items:center;gap:10px}
-.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#dcd7ff;color:#5547ce;font-weight:800}
-.main{margin-left:250px;width:calc(100% - 250px);padding:28px 42px 60px}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}.search{width:min(420px,45vw);background:#fff;border:1px solid var(--line);padding:12px 16px;border-radius:14px;outline:none}.top-actions{display:flex;gap:10px;align-items:center}
-.iconbtn{border:1px solid var(--line);background:#fff;width:42px;height:42px;border-radius:13px;cursor:pointer}.profile-btn{display:flex;align-items:center;gap:9px;border:0;background:none;font-weight:700;cursor:pointer}
-.view{display:none}.view.active{display:block}.hero{background:linear-gradient(115deg,#211d49,#5d4ee9);color:#fff;border-radius:28px;padding:36px 38px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
-.hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:#fff1;right:-50px;top:-100px;box-shadow:-100px 190px 0 40px #fff0}
-.hero h1{font-size:38px;line-height:1.05;margin:0 0 12px;max-width:620px}.hero p{color:#dcd9ff;max-width:620px;font-size:15px}.hero .pill{display:inline-flex;padding:7px 11px;border-radius:20px;background:#ffffff1c;font-size:12px;font-weight:700;margin-bottom:20px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 8px 30px rgba(30,25,70,.04)}
-.card h3{margin:8px 0 7px}.muted{color:var(--muted);font-size:14px}.section-head{display:flex;justify-content:space-between;align-items:end;margin:8px 0 18px}.section-head h2{margin:0;font-size:25px}
-.announcement{display:flex;gap:15px;align-items:flex-start}.dot{width:11px;height:11px;background:var(--primary);border-radius:50%;margin-top:7px;flex:none}.date{font-size:12px;color:#9a9daf}
-.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.course{padding:0;overflow:hidden}.cover{height:135px;background:linear-gradient(135deg,#dcd7ff,#f5f3ff);display:flex;align-items:end;padding:16px;position:relative}.cover span{background:#fff;padding:6px 9px;border-radius:9px;font-size:11px;font-weight:800;color:#6254dc}.course-body{padding:18px}.progress{height:7px;background:#eeeef5;border-radius:10px;overflow:hidden;margin:14px 0 8px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#6d5dfc,#a58cff);border-radius:10px}
-.library-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.resource{padding:18px}.resource-icon{width:45px;height:45px;border-radius:13px;background:#f0efff;display:grid;place-items:center;color:#6254dc;font-weight:800}
-.profile-card{display:grid;grid-template-columns:130px 1fr;gap:30px;align-items:center}.big-avatar{width:120px;height:120px;border-radius:35px;background:linear-gradient(135deg,#cfc8ff,#eeeaff);display:grid;place-items:center;font-size:38px;font-weight:900;color:#5d4edc}
-.stats{display:flex;gap:14px;margin-top:18px}.stat{background:#fafaff;border:1px solid var(--line);padding:14px 18px;border-radius:15px}.stat b{font-size:22px;display:block}
-.admin{background:#fff}.admin-head{background:#191631;color:#fff;border-radius:25px;padding:28px}.admin-tabs{display:flex;gap:8px;margin:20px 0}.admin-tabs button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 13px;cursor:pointer}.admin-tabs button.active{background:#191631;color:#fff}
-.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:15px;border-bottom:1px solid var(--line);font-size:14px}.badge{padding:5px 9px;border-radius:20px;background:#e9fbf4;color:#178b69;font-size:11px;font-weight:800}
-.primary{background:var(--primary);color:#fff;border:0;padding:11px 15px;border-radius:12px;font-weight:700;cursor:pointer}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);padding:11px 15px;border-radius:12px;font-weight:700;cursor:pointer}
-.login-overlay{position:fixed;inset:0;background:#17152cdd;z-index:100;display:none;place-items:center;padding:20px}.login-box{background:#fff;width:min(430px,100%);padding:30px;border-radius:25px}.login-box h2{margin-top:0}.field{margin:14px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px;color:#666a7e}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;outline:none}.error{color:#d14e78;font-size:13px;display:none;margin-top:10px}
-.toast{position:fixed;right:25px;bottom:25px;background:#1d1939;color:#fff;padding:13px 17px;border-radius:13px;display:none;z-index:120}
-@media(max-width:900px){.sidebar{width:76px}.logo span,.nav button span,.user-mini div:last-child{display:none}.main{margin-left:76px;width:calc(100% - 76px);padding:22px}.grid,.course-grid{grid-template-columns:1fr 1fr}.library-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.main{padding:15px}.topbar .search{display:none}.grid,.course-grid,.library-grid{grid-template-columns:1fr}.hero h1{font-size:29px}.profile-card{grid-template-columns:1fr}.sidebar{width:64px}.main{margin-left:64px;width:calc(100% - 64px)}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aetheria LMS | Light Ivory & Copper Cloud Sanctuary</title>
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js, GSAP & ScrollTrigger Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      /* Palette: Light Ivory Base & Warm Copper Accents */
+      --bg-light: #f7f4ee;                 /* Light Warm Ivory Base */
+      --glass-panel: rgba(255, 253, 249, 0.75);/* High-clarity frosted light ivory glass */
+      --glass-card: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(184, 115, 51, 0.22);/* Delicate metallic copper border */
+      
+      --accent-copper: #b87333;            /* Rich Copper */
+      --accent-copper-dark: #8c4e1a;       /* Deep Warm Bronze Copper */
+      --accent-copper-light: #d48c46;      /* Bright Polished Copper */
+      --accent-ivory: #ffffff;             /* Pure White Ivory Highlight */
+      
+      --text-main: #2b221b;                /* High-contrast deep dark warm brown text */
+      --text-muted: #6e5f53;               /* Muted warm earth text */
+      --sidebar-width: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      overflow-x: hidden;
+      width: 100vw;
+    }
+
+    /* Fixed WebGL Background Canvas */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Glassmorphism Light Panels */
+    .glass-box {
+      background: var(--glass-panel);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(138, 90, 48, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .glass-card {
+      background: var(--glass-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 24px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-copper-light);
+      box-shadow: 0 12px 30px rgba(184, 115, 51, 0.15);
+    }
+
+    /* Strict Invite-Only Login Guard Overlay */
+    #auth-guard {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(247, 244, 238, 0.88);
+      backdrop-filter: blur(25px);
+    }
+
+    .login-modal {
+      width: 400px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-copper-dark) 0%, var(--accent-copper-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-main);
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-copper);
+      background: #ffffff;
+      box-shadow: 0 0 15px rgba(184, 115, 51, 0.2);
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-copper) 0%, var(--accent-copper-dark) 100%);
+      color: var(--accent-ivory);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(184, 115, 51, 0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(184, 115, 51, 0.35);
+    }
+
+    /* Main Viewport & Scroll Container */
+    #app-container {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    /* Fixed Navigation Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: var(--sidebar-width);
+      height: calc(100vh - 40px);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .nav-list { list-style: none; margin-top: 30px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: var(--accent-copper-dark);
+      background: rgba(184, 115, 51, 0.1);
+      border: 1px solid var(--glass-border);
+    }
+
+    .nav-item.active { border-left: 3px solid var(--accent-copper); }
+
+    /* Scrollable Section Storyboard Layout */
+    .sections-wrapper {
+      margin-left: calc(var(--sidebar-width) + 40px);
+      padding: 20px 40px 100px 0;
+      width: calc(100vw - var(--sidebar-width) - 60px);
+    }
+
+    .lms-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 0;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--accent-copper-dark);
+    }
+
+    /* Grid Layouts */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    /* Dynamic Links & Custom Elements */
+    .auto-link {
+      color: var(--accent-copper);
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .pill-badge {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-admin { background: rgba(184, 115, 51, 0.15); color: var(--accent-copper-dark); border: 1px solid var(--accent-copper); }
+    .badge-editor { background: rgba(212, 140, 70, 0.15); color: var(--accent-copper); border: 1px solid var(--accent-copper-light); }
+    .badge-student { background: rgba(110, 95, 83, 0.12); color: var(--text-muted); border: 1px solid rgba(110, 95, 83, 0.3); }
+
+    .video-frame {
+      position: relative;
+      padding-bottom: 56.25%;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background: #000;
+    }
+    .video-frame iframe { position: absolute; width: 100%; height: 100%; border: 0; }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--accent-copper-dark);
+      cursor: pointer;
+    }
+    .btn-sm:hover { background: rgba(184, 115, 51, 0.15); }
+    .btn-danger { background: rgba(184, 115, 51, 0.12); color: var(--accent-copper-dark); }
+  </style>
 </head>
 <body>
-<div class="app">
-<aside class="sidebar">
-  <div class="logo"><div class="logo-mark">L</div><span>Learnly</span></div>
-  <nav class="nav">
-    <button class="active" data-view="announcements">◉ <span>Announcements</span></button>
-    <button data-view="courses">▣ <span>Courses</span></button>
-    <button data-view="library">◫ <span>Library</span></button>
-    <button data-view="profile">◎ <span>Profile</span></button>
-    <button data-view="help">?</span> <span>Help</span></button>
-    <button class="admin-link" id="adminNav" data-view="admin" style="display:none">⚙ <span>Admin Panel</span></button>
-  </nav>
-  <div class="user-mini"><div class="avatar" id="miniAvatar">H</div><div><b id="miniName">Student</b><div class="muted" id="miniRole">Student</div></div></div>
-</aside>
 
-<main class="main">
-<header class="topbar">
-  <input class="search" placeholder="Search courses, resources..." oninput="filterCards(this.value)">
-  <div class="top-actions"><button class="iconbtn">⌕</button><button class="iconbtn">◔</button><button class="profile-btn" onclick="showView('profile')"><div class="avatar" id="topAvatar">H</div><span id="topName">Student</span></button></div>
-</header>
+  <!-- WebGL Background Scene Canvas -->
+  <div id="webgl-canvas"></div>
 
-<section id="TO be known" class="view active">
-  <div class="hero"><div class="pill">YOUR LEARNING SPACE</div><h1>Learn something today.<br>Build something tomorrow.</h1><p>Your private learning hub for courses, notes, resources and everything you need to keep moving forward.</p><button class="primary" onclick="showView('courses')">Explore courses →</button></div>
-  <div class="section-head"><h2>Latest announcements</h2><span class="muted">Stay in the loop</span></div>
-  <div class="grid">
-    <div class="card announcement"><i class="dot"></i><div><b>New SQL Mastery course is live</b><p class="muted">Start with window functions, CTEs and real business cases.</p><span class="date">Today · 9:30 AM</span></div></div>
-    <div class="card announcement"><i class="dot"></i><div><b>Weekly challenge posted</b><p class="muted">Solve this week's analytics case before Sunday.</p><span class="date">Yesterday</span></div></div>
-    <div class="card announcement"><i class="dot"></i><div><b>New resources added</b><p class="muted">Check the Library for interview preparation material.</p><span class="date">Sep 4, 2026</span></div></div>
+  <!-- Invite-Only Login Guard Overlay -->
+  <div id="auth-guard">
+    <div class="glass-box login-modal">
+      <div class="brand-title">Aetheria</div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">Copper & Light Ivory Cloud Sanctuary</p>
+      
+      <form onsubmit="event.preventDefault(); login();">
+        <input type="text" id="user" class="input-field" placeholder="Username" required autocomplete="off">
+        <input type="password" id="pass" class="input-field" placeholder="Password" required>
+        <button type="submit" class="btn-action">Enter Sanctuary</button>
+      </form>
+      <div id="login-err" style="color: var(--accent-copper-dark); font-size: 0.8rem; margin-top: 15px; display: none;"></div>
+    </div>
   </div>
-</section>
 
-<section id="courses" class="view">
-  <div class="section-head"><div><h2>Courses</h2><p class="muted">Continue where you left off.</p></div><button class="secondary">All courses</button></div>
-  <div class="course-grid">
-    <div class="card course"><div class="cover"><span>DATA ANALYTICS</span></div><div class="course-body"><h3>SQL Mastery</h3><p class="muted">From fundamentals to advanced business analytics.</p><div class="progress"><i style="width:72%"></i></div><small class="muted">72% complete · 18 lessons</small></div></div>
-    <div class="card course"><div class="cover"><span>BI & REPORTING</span></div><div class="course-body"><h3>Power BI Essentials</h3><p class="muted">Build dashboards, models and powerful DAX measures.</p><div class="progress"><i style="width:43%"></i></div><small class="muted">43% complete · 14 lessons</small></div></div>
-    <div class="card course"><div class="cover"><span>CAREER</span></div><div class="course-body"><h3>Analytics Interview Lab</h3><p class="muted">Cases, guesstimates, metrics and stakeholder thinking.</p><div class="progress"><i style="width:18%"></i></div><small class="muted">18% complete · 11 lessons</small></div></div>
+  <!-- Main Scrollable App Container -->
+  <div id="app-container">
+    
+    <!-- Sidebar Navigation Controls -->
+    <aside class="glass-box sidebar">
+      <div>
+        <div style="padding: 0 10px 20px 10px;">
+          <div class="brand-title" style="font-size: 1.6rem;">Aetheria</div>
+          <span style="font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px;">CLOUD SANCTUARY</span>
+        </div>
+        <ul class="nav-list">
+          <li class="nav-item active" onclick="scrollToSec('sec-announcements')"><i data-lucide="bell"></i> Announcements</li>
+          <li class="nav-item" onclick="scrollToSec('sec-courses')"><i data-lucide="book-open"></i> Courses</li>
+          <li class="nav-item" onclick="scrollToSec('sec-library')"><i data-lucide="folder"></i> Library</li>
+          <li class="nav-item" onclick="scrollToSec('sec-jobs')"><i data-lucide="briefcase"></i> Opportunities</li>
+          <li class="nav-item" onclick="scrollToSec('sec-profile')"><i data-lucide="user"></i> Profile</li>
+          <li class="nav-item" onclick="scrollToSec('sec-help')"><i data-lucide="help-circle"></i> Help</li>
+        </ul>
+      </div>
+      <div>
+        <div style="margin-bottom: 15px; padding: 0 10px;">
+          <div id="u-name" style="font-weight: 600;">Guest</div>
+          <span id="u-role" class="pill-badge badge-student">Student</span>
+        </div>
+        <button onclick="logout()" class="btn-sm btn-danger" style="width: 100%;"><i data-lucide="log-out"></i> End Session</button>
+      </div>
+    </aside>
+
+    <!-- Scrollable Content Storyboard Sections -->
+    <main class="sections-wrapper">
+
+      <!-- 1. ANNOUNCEMENTS -->
+      <section id="sec-announcements" class="lms-section">
+        <h2 class="section-title">Sanctuary Announcements</h2>
+        <p style="color: var(--text-muted);">Latest updates from around the academy sanctuary.</p>
+        <div id="btn-add-announcement" style="margin-top: 15px; display: none;">
+          <button onclick="createItem('announcement')" class="btn-action" style="width: auto; padding: 10px 20px;">+ Post Announcement</button>
+        </div>
+        <div id="announcement-grid" class="grid-container"></div>
+      </section>
+
+      <!-- 2. COURSES -->
+      <section id="sec-courses" class="lms-section">
+        <div id="courses-catalog">
+          <h2 class="section-title">Courses & Topics</h2>
+          <p style="color: var(--text-muted);">Explore video modules and guided study paths.</p>
+          <div id="btn-add-course" style="margin-top: 15px; display: none;">
+            <button onclick="createItem('course')" class="btn-action" style="width: auto; padding: 10px 20px;">+ Add Topic / Video</button>
+          </div>
+          <div id="course-grid" class="grid-container"></div>
+        </div>
+
+        <!-- Topic Detailed View Container -->
+        <div id="topic-detail" class="glass-box" style="padding: 30px; display: none;">
+          <button onclick="closeTopic()" class="btn-sm" style="margin-bottom: 20px;"><i data-lucide="arrow-left"></i> Back to Courses</button>
+          <h2 id="topic-title" style="margin-bottom: 15px;"></h2>
+          <div id="video-wrapper" class="video-frame"></div>
+          <h4>Notes & Reference Material</h4>
+          <div id="topic-notes" style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 12px; margin: 15px 0; white-space: pre-wrap;"></div>
+          
+          <h4 style="margin-top: 30px;">Sanctuary Discussion</h4>
+          <div id="comment-list" style="margin: 15px 0;"></div>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="comm-input" class="input-field" placeholder="Ask a question or share a link..." style="margin:0; flex:1;">
+            <button onclick="postComment()" class="btn-action" style="margin:0; width:auto;">Post</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. LIBRARY -->
+      <section id="sec-library" class="lms-section">
+        <h2 class="section-title">Resource Library</h2>
+        <p style="color: var(--text-muted);">Curated reading materials and external reference links.</p>
+        <div id="btn-add-lib" style="margin-top: 15px; display: none;">
+          <button onclick="createItem('library')" class="btn-action" style="width: auto; padding: 10px 20px;">+ Add Resource</button>
+        </div>
+        <div id="library-grid" class="grid-container"></div>
+      </section>
+
+      <!-- 4. JOB OPPORTUNITIES -->
+      <section id="sec-jobs" class="lms-section">
+        <h2 class="section-title">Job Opportunities</h2>
+        <p style="color: var(--text-muted);">Career listings managed by academy administrators.</p>
+        <div id="btn-add-job" style="margin-top: 15px; display: none;">
+          <button onclick="createItem('job')" class="btn-action" style="width: auto; padding: 10px 20px;">+ Post Opening</button>
+        </div>
+        <div id="job-grid" class="grid-container"></div>
+      </section>
+
+      <!-- 5. PROFILE -->
+      <section id="sec-profile" class="lms-section">
+        <h2 class="section-title">User Profile</h2>
+        <div class="glass-box" style="padding: 30px; max-width: 500px; margin-top: 20px;">
+          <h3>Account Credentials</h3>
+          <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div><strong>User ID:</strong> <span id="p-user"></span></div>
+            <div><strong>Role:</strong> <span id="p-role"></span></div>
+            <div><strong>Access Override:</strong> <span id="p-override"></span></div>
+            <div><strong>Assigned Subjects:</strong> <div id="p-subjects" style="margin-top:8px; display:flex; gap:8px;"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. HELP HUB -->
+      <section id="sec-help" class="lms-section">
+        <h2 class="section-title">Sanctuary Guide</h2>
+        <div class="glass-box" style="padding: 30px; margin-top: 20px;">
+          <h3>Aetheria Platform Access & Structure</h3>
+          <p style="margin-top: 10px; color: var(--text-muted); line-height: 1.6;">
+            Access to Aetheria is strictly invite-only. Role hierarchies control system interactions:
+          </p>
+          <ul style="margin: 15px 0 0 20px; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>Admin:</strong> Global access to add, edit, or delete any content.</li>
+            <li><strong>Editor:</strong> Authoring rights; can modify or delete only their self-created assets.</li>
+            <li><strong>Student:</strong> Read-only learner access filtered strictly by assigned subjects.</li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
   </div>
-</section>
 
-<section id="library" class="view">
-  <div class="section-head"><div><h2>Library</h2><p class="muted">Your collection of useful learning material.</p></div></div>
-  <div class="library-grid">
-    <div class="card resource"><div class="resource-icon">PDF</div><h3>SQL Cheat Sheet</h3><p class="muted">Quick reference for joins, windows and dates.</p></div>
-    <div class="card resource"><div class="resource-icon">DOC</div><h3>Case Study Framework</h3><p class="muted">A repeatable framework for analytics cases.</p></div>
-    <div class="card resource"><div class="resource-icon">VID</div><h3>DAX Fundamentals</h3><p class="muted">Short video lessons and examples.</p></div>
-    <div class="card resource"><div class="resource-icon">XLS</div><h3>Practice Dataset</h3><p class="muted">Realistic datasets for hands-on practice.</p></div>
-  </div>
-</section>
+  <script>
+    /* 1. MOCK DATABASE ENGINE */
+    const DB = {
+      users: [
+        { username: 'admin', pass: 'admin123', role: 'admin', subject_all: true, allowed_subjects: [] },
+        { username: 'editor', pass: 'edit123', role: 'editor', subject_all: true, allowed_subjects: [] },
+        { username: 'devops_student', pass: 'stud123', role: 'student', subject_all: false, allowed_subjects: ['DevOps'] }
+      ],
+      announcements: [
+        { id: 1, title: 'Cloud Sanctuary Opening', body: 'Welcome to Aetheria Cloud Academy! Access docs at https://aetheria.edu/docs', author: 'admin' }
+      ],
+      courses: [
+        { id: 1, subject: 'DevOps', title: 'Kubernetes Architecture', ytUrl: 'https://www.youtube.com/watch?v=PH-2FfFD2PU', notes: 'Official Kubernetes Guide: https://kubernetes.io', author: 'admin', comments: [] },
+        { id: 2, subject: 'Data Science', title: 'Neural Networks & AI', ytUrl: 'https://www.youtube.com/watch?v=aircAruvnKk', notes: 'Deep Learning fundamentals: https://colab.research.google.com', author: 'editor', comments: [] }
+      ],
+      library: [
+        { id: 1, subject: 'DevOps', title: 'Docker Reference Manual', url: 'https://docs.docker.com', author: 'admin' }
+      ],
+      jobs: [
+        { id: 1, title: 'DevOps Cloud Engineer', company: 'Zenith Labs', link: 'https://careers.google.com', author: 'admin' }
+      ]
+    };
 
-<section id="profile" class="view">
-  <div class="card profile-card"><div class="big-avatar" id="bigAvatar">H</div><div><span class="badge" id="profileRole">STUDENT</span><h2 id="profileName">Student</h2><p class="muted">Learning journey · Analytics track</p><div class="stats"><div class="stat"><b>4</b><small class="muted">Courses</small></div><div class="stat"><b>28</b><small class="muted">Lessons</small></div><div class="stat"><b>72%</b><small class="muted">Progress</small></div></div></div></div>
-</section>
+    let currentUser = null;
+    let activeTopicId = null;
 
-<section id="help" class="view">
-  <div class="section-head"><div><h2>How can we help?</h2><p class="muted">Everything you need to use Learnly.</p></div></div>
-  <div class="grid">
-    <div class="card"><h3>Getting started</h3><p class="muted">Open Courses to start a lesson. Your progress can be tracked automatically once Firebase is connected.</p></div>
-    <div class="card"><h3>Need access?</h3><p class="muted">Ask the administrator to add your account or grant access to a course.</p></div>
-    <div class="card"><h3>Something not working?</h3><p class="muted">Contact the administrator with the course name and a screenshot of the issue.</p></div>
-  </div>
-</section>
+    /* 2. THREE.JS LIGHT IVORY & COPPER VOLUMETRIC CLOUD 3D ENGINE */
+    let scene, camera, renderer, cloudGroup, particles;
 
-<section id="admin" class="view admin">
-  <div class="admin-head"><span class="pill">ADMINISTRATOR</span><h1>Control your learning space.</h1><p>Manage courses, announcements, resources and student access from one place.</p></div>
-  <div class="admin-tabs"><button class="active">Overview</button><button onclick="toast('Course editor ready for Firebase integration')">Courses</button><button onclick="toast('Resource manager ready for Firebase integration')">Library</button><button onclick="toast('User management ready for Firebase integration')">Students</button></div>
-  <div class="card"><div class="section-head"><h2>Recent activity</h2><button class="primary" onclick="toast('New course form opened')">+ Add course</button></div>
-  <table class="table"><tr><th>Item</th><th>Type</th><th>Status</th><th>Updated</th></tr>
-  <tr><td>SQL Mastery</td><td>Course</td><td><span class="badge">Published</span></td><td>Today</td></tr>
-  <tr><td>Weekly challenge</td><td>Announcement</td><td><span class="badge">Live</span></td><td>Yesterday</td></tr>
-  <tr><td>SQL Cheat Sheet</td><td>Library</td><td><span class="badge">Published</span></td><td>Sep 4</td></tr></table></div>
-</section>
-</main>
-</div>
+    function init3D() {
+      const container = document.getElementById('webgl-canvas');
+      scene = new THREE.Scene();
+      // Soft Light Ivory Volumetric Fog
+      scene.fog = new THREE.FogExp2(0xf7f4ee, 0.022);
 
-<div class="login-overlay" id="loginOverlay">
-<div class="login-box">
-<h2>Welcome back</h2><p class="muted">Sign in to your private learning space.</p>
-<div class="field"><label>USER ID</label><input id="loginId" value="student"></div>
-<div class="field"><label>PASSWORD</label><input id="loginPass" type="password" value="learn123"></div>
-<button class="primary" style="width:100%" onclick="login()">Sign in</button>
-<div class="error" id="loginError">Invalid credentials.</div>
-<p class="muted" style="font-size:12px;margin-bottom:0">Demo: <b>admin / admin123</b> or <b>student / learn123</b></p>
-</div></div>
-<div class="toast" id="toast"></div>
+      camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 0, 30);
 
-<script>
-const users={admin:{password:'admin123',name:'Administrator',role:'admin'},student:{password:'learn123',name:'Student',role:'student'}};
-let currentUser=null;
-function showView(id){
- document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
- window.scrollTo({top:0,behavior:'smooth'});
-}
-document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-function login(){
- const id=document.getElementById('loginId').value.trim().toLowerCase(), pass=document.getElementById('loginPass').value;
- if(users[id]&&users[id].password===pass){
-  currentUser=users[id]; document.getElementById('loginOverlay').style.display='none';
-  const initial=currentUser.name[0];
-  ['miniAvatar','topAvatar','bigAvatar'].forEach(x=>document.getElementById(x).textContent=initial);
-  document.getElementById('miniName').textContent=currentUser.name; document.getElementById('miniRole').textContent=currentUser.role==='admin'?'Administrator':'Student';
-  document.getElementById('topName').textContent=currentUser.name; document.getElementById('profileName').textContent=currentUser.name;
-  document.getElementById('profileRole').textContent=currentUser.role.toUpperCase();
-  document.getElementById('adminNav').style.display=currentUser.role==='admin'?'flex':'none';
-  showView('announcements'); toast('Signed in successfully');
- }else document.getElementById('loginError').style.display='block';
-}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
-function filterCards(q){q=q.toLowerCase();document.querySelectorAll('.card,.course').forEach(c=>{c.style.opacity=(!q||c.innerText.toLowerCase().includes(q))?'1':'.25'})}
-document.getElementById('loginOverlay').style.display='grid';
-</script>
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // Light Sky Lighting Setup
+      const ambientLight = new THREE.AmbientLight(0xfffdfa, 2.2);
+      scene.add(ambientLight);
+
+      const copperSun = new THREE.DirectionalLight(0xd48c46, 2.0);
+      copperSun.position.set(10, 30, 20);
+      scene.add(copperSun);
+
+      const ivoryGlow = new THREE.PointLight(0xffffff, 2.5, 40);
+      ivoryGlow.position.set(-10, -10, 10);
+      scene.add(ivoryGlow);
+
+      // Master Cloud Group
+      cloudGroup = new THREE.Group();
+      scene.add(cloudGroup);
+
+      // Create Volumetric Soft Cloud Clusters (Replacing the Tree)
+      const cloudMatIvory = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.9,
+        transparent: true,
+        opacity: 0.82,
+        flatShading: true
+      });
+
+      const cloudMatCopper = new THREE.MeshStandardMaterial({
+        color: 0xeddcc4,
+        roughness: 0.8,
+        transparent: true,
+        opacity: 0.75,
+        flatShading: true
+      });
+
+      // Generate cloud banks along the scroll journey path
+      for (let i = 0; i < 28; i++) {
+        const cluster = new THREE.Group();
+        const numPuffs = 5 + Math.floor(Math.random() * 6);
+        const mat = (i % 3 === 0) ? cloudMatCopper : cloudMatIvory;
+
+        for (let j = 0; j < numPuffs; j++) {
+          const radius = 2 + Math.random() * 3.5;
+          const puffGeo = new THREE.DodecahedronGeometry(radius, 1);
+          const puff = new THREE.Mesh(puffGeo, mat);
+          puff.position.set(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 3,
+            (Math.random() - 0.5) * 5
+          );
+          cluster.add(puff);
+        }
+
+        // Distribute cloud layers vertically and in depth along scroll path
+        cluster.position.set(
+          (Math.random() - 0.5) * 35,
+          (i * -4) + 10,
+          (Math.random() - 0.5) * 25
+        );
+        cloudGroup.add(cluster);
+      }
+
+      // Add Floating Ambient Copper Dust / Mist Particles
+      const pCount = 120;
+      const pGeo = new THREE.BufferGeometry();
+      const pPos = new Float32Array(pCount * 3);
+      for(let i = 0; i < pCount * 3; i += 3) {
+        pPos[i] = (Math.random() - 0.5) * 40;
+        pPos[i+1] = (Math.random() - 0.5) * 100;
+        pPos[i+2] = (Math.random() - 0.5) * 40;
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const pMat = new THREE.PointsMaterial({
+        color: 0xb87333,
+        size: 0.35,
+        transparent: true,
+        opacity: 0.6
+      });
+      particles = new THREE.Points(pGeo, pMat);
+      scene.add(particles);
+
+      // Init GSAP ScrollTrigger Cloud Flying Transition
+      initScrollAnimations();
+
+      window.addEventListener('resize', onResize);
+      document.addEventListener('mousemove', onPointerMove);
+      animate();
+    }
+
+    let mouseX = 0, mouseY = 0;
+    function onPointerMove(e) {
+      mouseX = (e.clientX / window.innerWidth) - 0.5;
+      mouseY = (e.clientY / window.innerHeight) - 0.5;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = Date.now() * 0.0005;
+
+      // Slow drift for cloud group to simulate living cloud/smoke sky
+      cloudGroup.children.forEach((cloud, index) => {
+        cloud.rotation.y = time * 0.1 * ((index % 2 === 0) ? 1 : -1);
+        cloud.position.x += Math.sin(time + index) * 0.005;
+      });
+
+      // Animate floating copper particles
+      const positions = particles.geometry.attributes.position.array;
+      for(let i = 1; i < positions.length; i += 3) {
+        positions[i] += Math.sin(time + i) * 0.01;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+
+      // Mouse Parallax Offset
+      camera.position.x += (mouseX * 4 - camera.position.x) * 0.04;
+      camera.lookAt(0, camera.position.y - 2, 0);
+
+      renderer.render(scene, camera);
+    }
+
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    /* 3. GSAP SCROLLTRIGGER CLOUD FLYING ENGINE */
+    function initScrollAnimations() {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Smooth scroll timeline gliding camera down through clouds
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".sections-wrapper",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5
+        }
+      });
+
+      tl.to(camera.position, { y: -15, z: 22, x: 3 })
+        .to(camera.position, { y: -35, z: 18, x: -4 })
+        .to(camera.position, { y: -55, z: 25, x: 2 })
+        .to(camera.position, { y: -75, z: 20, x: -2 });
+    }
+
+    function scrollToSec(secId) {
+      const el = document.getElementById(secId);
+      if(el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    /* 4. SYSTEM UTILITIES */
+    function linkify(text) {
+      if(!text) return '';
+      const regex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(regex, url => `<a href="${url}" target="_blank" class="auto-link">${url}</a>`);
+    }
+
+    function getYtEmbed(url) {
+      const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+      return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+    }
+
+    /* 5. AUTHENTICATION & ACCESS CONTROL */
+    function login() {
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
+      const err = document.getElementById('login-err');
+
+      const user = DB.users.find(x => x.username === u && x.pass === p);
+      if(user) {
+        currentUser = user;
+        err.style.display = 'none';
+
+        gsap.to('#auth-guard', { opacity: 0, duration: 0.6, onComplete: () => {
+          document.getElementById('auth-guard').style.display = 'none';
+          document.getElementById('app-container').style.opacity = '1';
+        }});
+
+        setupUI();
+        renderAll();
+      } else {
+        err.innerText = 'Invalid credentials. Access is restricted to invited accounts.';
+        err.style.display = 'block';
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('app-container').style.opacity = '0';
+      document.getElementById('auth-guard').style.display = 'flex';
+      gsap.to('#auth-guard', { opacity: 1, duration: 0.5 });
+    }
+
+    function setupUI() {
+      document.getElementById('u-name').innerText = currentUser.username;
+      const b = document.getElementById('u-role');
+      b.innerText = currentUser.role;
+      b.className = `pill-badge badge-${currentUser.role}`;
+
+      const isPower = currentUser.role === 'admin' || currentUser.role === 'editor';
+      document.getElementById('btn-add-announcement').style.display = isPower ? 'block' : 'none';
+      document.getElementById('btn-add-course').style.display = isPower ? 'block' : 'none';
+      document.getElementById('btn-add-lib').style.display = isPower ? 'block' : 'none';
+      document.getElementById('btn-add-job').style.display = isPower ? 'block' : 'none';
+    }
+
+    function hasAccess(sub) {
+      if(currentUser.subject_all) return true;
+      return currentUser.allowed_subjects.includes(sub);
+    }
+
+    function canDelete(item) {
+      if(currentUser.role === 'admin') return true;
+      if(currentUser.role === 'editor' && item.author === currentUser.username) return true;
+      return false;
+    }
+
+    /* 6. CONTENT RENDERERS */
+    function renderAll() {
+      renderAnnouncements();
+      renderCourses();
+      renderLibrary();
+      renderJobs();
+      renderProfile();
+    }
+
+    function renderAnnouncements() {
+      const container = document.getElementById('announcement-grid');
+      container.innerHTML = DB.announcements.map(item => `
+        <div class="glass-card">
+          <h3 style="margin-bottom: 10px;">${item.title}</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">${linkify(item.body)}</p>
+          <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted);">Author: ${item.author}</div>
+          ${canDelete(item) ? `<button onclick="deleteItem('announcements', ${item.id})" class="btn-sm btn-danger" style="margin-top:10px;">Delete</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderCourses() {
+      const container = document.getElementById('course-grid');
+      const filtered = DB.courses.filter(c => hasAccess(c.subject));
+
+      container.innerHTML = filtered.map(c => `
+        <div class="glass-card">
+          <span style="font-size:0.7rem; color: var(--accent-copper); font-weight:700;">${c.subject}</span>
+          <h3 style="margin: 8px 0 15px 0;">${c.title}</h3>
+          <div style="display:flex; gap:10px;">
+            <button onclick="openTopic(${c.id})" class="btn-sm"><i data-lucide="play-circle"></i> View Topic</button>
+            ${canDelete(c) ? `<button onclick="deleteItem('courses', ${c.id})" class="btn-sm btn-danger"><i data-lucide="trash"></i></button>` : ''}
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderLibrary() {
+      const container = document.getElementById('library-grid');
+      const filtered = DB.library.filter(l => hasAccess(l.subject));
+
+      container.innerHTML = filtered.map(item => `
+        <div class="glass-card">
+          <span style="font-size:0.7rem; color: var(--accent-copper-dark); font-weight:700;">${item.subject}</span>
+          <h3 style="margin: 8px 0 10px 0;">${item.title}</h3>
+          <div>${linkify(item.url)}</div>
+          ${canDelete(item) ? `<button onclick="deleteItem('library', ${item.id})" class="btn-sm btn-danger" style="margin-top:15px;">Delete</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderJobs() {
+      const container = document.getElementById('job-grid');
+      container.innerHTML = DB.jobs.map(item => `
+        <div class="glass-card">
+          <h3>${item.title}</h3>
+          <div style="color:var(--text-muted); font-size:0.85rem; margin: 6px 0 10px 0;">Company: ${item.company}</div>
+          <div>Apply Link: ${linkify(item.link)}</div>
+          ${canDelete(item) ? `<button onclick="deleteItem('jobs', ${item.id})" class="btn-sm btn-danger" style="margin-top:15px;">Delete</button>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderProfile() {
+      document.getElementById('p-user').innerText = currentUser.username;
+      document.getElementById('p-role').innerText = currentUser.role.toUpperCase();
+      document.getElementById('p-override').innerText = currentUser.subject_all ? 'Active (Full Platform Access)' : 'Inactive';
+      
+      const el = document.getElementById('p-subjects');
+      if(currentUser.subject_all) {
+        el.innerHTML = `<span class="pill-badge badge-editor">All Subjects Included</span>`;
+      } else {
+        el.innerHTML = currentUser.allowed_subjects.map(s => `<span class="pill-badge badge-student">${s}</span>`).join('');
+      }
+    }
+
+    /* 7. INTERACTION CONTROLLERS */
+    function openTopic(id) {
+      activeTopicId = id;
+      const c = DB.courses.find(x => x.id === id);
+      document.getElementById('courses-catalog').style.display = 'none';
+      document.getElementById('topic-detail').style.display = 'block';
+
+      document.getElementById('topic-title').innerText = c.title;
+      document.getElementById('topic-notes').innerHTML = linkify(c.notes);
+
+      const embed = getYtEmbed(c.ytUrl);
+      document.getElementById('video-wrapper').innerHTML = embed 
+        ? `<iframe src="${embed}" allowfullscreen></iframe>`
+        : `<div style="padding:30px; text-align:center;">Link: ${linkify(c.ytUrl)}</div>`;
+
+      renderComments();
+    }
+
+    function closeTopic() {
+      document.getElementById('topic-detail').style.display = 'none';
+      document.getElementById('courses-catalog').style.display = 'block';
+      document.getElementById('video-wrapper').innerHTML = '';
+      activeTopicId = null;
+    }
+
+    function renderComments() {
+      const c = DB.courses.find(x => x.id === activeTopicId);
+      document.getElementById('comment-list').innerHTML = c.comments.map(cm => `
+        <div style="background: rgba(255,255,255,0.6); padding: 10px 14px; border-radius: 8px; margin-bottom: 8px;">
+          <div style="font-size:0.75rem; color:var(--accent-copper);">${cm.author}</div>
+          <div>${linkify(cm.text)}</div>
+        </div>
+      `).join('') || '<p style="color:var(--text-muted); font-size:0.85rem;">No comments posted yet.</p>';
+    }
+
+    function postComment() {
+      const inp = document.getElementById('comm-input');
+      if(!inp.value.trim()) return;
+
+      const c = DB.courses.find(x => x.id === activeTopicId);
+      c.comments.push({ author: currentUser.username, text: inp.value });
+      inp.value = '';
+      renderComments();
+    }
+
+    function deleteItem(type, id) {
+      DB[type] = DB[type].filter(x => x.id !== id);
+      renderAll();
+    }
+
+    function createItem(type) {
+      const title = prompt(`Enter ${type} title:`);
+      if(!title) return;
+
+      if(type === 'announcement') {
+        const body = prompt('Enter announcement content/links:');
+        DB.announcements.push({ id: Date.now(), title, body, author: currentUser.username });
+      } else if(type === 'course') {
+        const subject = prompt('Enter Subject Name:');
+        const ytUrl = prompt('Enter YouTube Link:');
+        const notes = prompt('Enter Notes/Documentation:');
+        DB.courses.push({ id: Date.now(), subject, title, ytUrl, notes, author: currentUser.username, comments: [] });
+      } else if(type === 'library') {
+        const subject = prompt('Enter Subject Name:');
+        const url = prompt('Enter Resource URL:');
+        DB.library.push({ id: Date.now(), subject, title, url, author: currentUser.username });
+      } else if(type === 'job') {
+        const company = prompt('Enter Company Name:');
+        const link = prompt('Enter Job Link:');
+        DB.jobs.push({ id: Date.now(), title, company, link, author: currentUser.username });
+      }
+
+      renderAll();
+    }
+
+    window.onload = () => {
+      init3D();
+      lucide.createIcons();
+    };
+  </script>
 </body>
 </html>
