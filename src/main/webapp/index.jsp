@@ -63,7 +63,7 @@ button,input{font:inherit}.app{display:flex;min-height:100vh}
   <div class="top-actions"><button class="iconbtn">⌕</button><button class="iconbtn">◔</button><button class="profile-btn" onclick="showView('profile')"><div class="avatar" id="topAvatar">H</div><span id="topName">Student</span></button></div>
 </header>
 
-<section id="announcements" class="view active">
+<section id="TO be known" class="view active">
   <div class="hero"><div class="pill">YOUR LEARNING SPACE</div><h1>Learn something today.<br>Build something tomorrow.</h1><p>Your private learning hub for courses, notes, resources and everything you need to keep moving forward.</p><button class="primary" onclick="showView('courses')">Explore courses →</button></div>
   <div class="section-head"><h2>Latest announcements</h2><span class="muted">Stay in the loop</span></div>
   <div class="grid">
